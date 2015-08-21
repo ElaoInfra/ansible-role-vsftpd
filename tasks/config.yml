@@ -1,0 +1,16 @@
+---
+
+- name: config > Dir
+  file:
+    path:  "{{ elao_vsftpd_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: config > Template
+  template:
+    src:  "{{ elao_vsftpd_config_template|ternary(elao_vsftpd_config_template, 'config/base.j2') }}"
+    dest: "{{ elao_vsftpd_config_file }}"
+  when: (elao_vsftpd_config_template is not none) or (elao_vsftpd_config|length)
+  notify:
+    - vsftpd restart

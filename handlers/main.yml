@@ -1,0 +1,9 @@
+---
+
+- name: vsftpd restart
+  service:
+    name:  vsftpd
+    state: restarted
+
+- name: vsftpd guests db build
+  command: "db_load -T -t hash -f {{ elao_vsftpd_guests_config_file }} {{ elao_vsftpd_guests_config_file }}.db"

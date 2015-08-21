@@ -1,0 +1,21 @@
+---
+
+- name: guests > Dir
+  file:
+    path:  "{{ elao_vsftpd_guests_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: guests > Template
+  template:
+    src:  guests/base.j2
+    dest: "{{ elao_vsftpd_guests_config_file }}"
+  notify:
+    - vsftpd guests db build
+
+- name: guests > Template config
+  template:
+    src:  "{{ item.config_template|ternary(item.config_template, 'guests/config/base.j2') }}"
+    dest: "{{ elao_vsftpd_guests_config_dir }}/{{ item.name }}"
+  with_items: elao_vsftpd_guests

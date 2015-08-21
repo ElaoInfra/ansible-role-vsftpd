@@ -1,0 +1,217 @@
+{%- import '_macros.j2' as macros with context -%}
+
+{% set config = elao_vsftpd_config -%}
+
+# Example config file /etc/vsftpd.conf
+#
+# The default compiled in settings are fairly paranoid. This sample file
+# loosens things up a bit, to make the ftp daemon more usable.
+# Please see vsftpd.conf.5 for all compiled in defaults.
+#
+# READ THIS: This example file is NOT an exhaustive list of vsftpd options.
+# Please read the vsftpd.conf.5 manual page to get a full idea of vsftpd's
+# capabilities.
+#
+#
+# Run standalone?  vsftpd can run either from an inetd or as a standalone
+# daemon started from an initscript.
+{{ macros.config_row(config, 'listen', true) }}
+#
+# Run standalone with IPv6?
+# Like the listen parameter, except vsftpd will listen on an IPv6 socket
+# instead of an IPv4 one. This parameter and the listen parameter are mutually
+# exclusive.
+{{ macros.config_row(config, 'listen_ipv6', '#listen_ipv6=YES', true) }}
+#
+# Allow anonymous FTP? (Beware - allowed by default if you comment this out).
+{{ macros.config_row(config, 'anonymous_enable', false) }}
+#
+# Uncomment this to allow local users to log in.
+{{ macros.config_row(config, 'local_enable', true) }}
+#
+# Uncomment this to enable any form of FTP write command.
+{{ macros.config_row(config, 'write_enable', '#write_enable=YES', true) }}
+#
+# Default umask for local users is 077. You may wish to change this to 022,
+# if your users expect that (022 is used by most other ftpd's)
+{{ macros.config_row(config, 'local_umask', '#local_umask=022', true) }}
+#
+# Uncomment this to allow the anonymous FTP user to upload files. This only
+# has an effect if the above global write enable is activated. Also, you will
+# obviously need to create a directory writable by the FTP user.
+{{ macros.config_row(config, 'anon_upload_enable', '#anon_upload_enable=YES', true) }}
+#
+# Uncomment this if you want the anonymous FTP user to be able to create
+# new directories.
+{{ macros.config_row(config, 'anon_mkdir_write_enable', '#anon_mkdir_write_enable=YES', true) }}
+#
+# Activate directory messages - messages given to remote users when they
+# go into a certain directory.
+{{ macros.config_row(config, 'dirmessage_enable', true) }}
+#
+# If enabled, vsftpd will display directory listings with the time
+# in  your  local  time  zone.  The default is to display GMT. The
+# times returned by the MDTM FTP command are also affected by this
+# option.
+{{ macros.config_row(config, 'use_localtime', true) }}
+#
+# Activate logging of uploads/downloads.
+{{ macros.config_row(config, 'xferlog_enable', true) }}
+#
+# Make sure PORT transfer connections originate from port 20 (ftp-data).
+{{ macros.config_row(config, 'connect_from_port_20', true) }}
+#
+# If you want, you can arrange for uploaded anonymous files to be owned by
+# a different user. Note! Using "root" for uploaded files is not
+# recommended!
+{{ macros.config_row(config, 'chown_uploads', '#chown_uploads=YES', true) }}
+{{ macros.config_row(config, 'chown_username', '#chown_username=whoever', true) }}
+#
+# You may override where the log file goes if you like. The default is shown
+# below.
+{{ macros.config_row(config, 'xferlog_file', '#xferlog_file=/var/log/vsftpd.log', true) }}
+#
+# If you want, you can have your log file in standard ftpd xferlog format.
+# Note that the default log file location is /var/log/xferlog in this case.
+{{ macros.config_row(config, 'xferlog_std_format', '#xferlog_std_format=YES', true) }}
+#
+# You may change the default value for timing out an idle session.
+{{ macros.config_row(config, 'idle_session_timeout', '#idle_session_timeout=600', true) }}
+#
+# You may change the default value for timing out a data connection.
+{{ macros.config_row(config, 'data_connection_timeout', '#data_connection_timeout=120', true) }}
+#
+# It is recommended that you define on your system a unique user which the
+# ftp server can use as a totally isolated and unprivileged user.
+{{ macros.config_row(config, 'nopriv_user', '#nopriv_user=ftpsecure', true) }}
+#
+# Enable this and the server will recognise asynchronous ABOR requests. Not
+# recommended for security (the code is non-trivial). Not enabling it,
+# however, may confuse older FTP clients.
+{{ macros.config_row(config, 'async_abor_enable', '#async_abor_enable=YES', true) }}
+#
+# By default the server will pretend to allow ASCII mode but in fact ignore
+# the request. Turn on the below options to have the server actually do ASCII
+# mangling on files when in ASCII mode.
+# Beware that on some FTP servers, ASCII support allows a denial of service
+# attack (DoS) via the command "SIZE /big/file" in ASCII mode. vsftpd
+# predicted this attack and has always been safe, reporting the size of the
+# raw file.
+# ASCII mangling is a horrible feature of the protocol.
+{{ macros.config_row(config, 'ascii_upload_enable', '#ascii_upload_enable=YES', true) }}
+{{ macros.config_row(config, 'ascii_download_enable', '#ascii_download_enable=YES', true) }}
+#
+# You may fully customise the login banner string:
+{{ macros.config_row(config, 'ftpd_banner', '#ftpd_banner=Welcome to blah FTP service.', true) }}
+#
+# You may specify a file of disallowed anonymous e-mail addresses. Apparently
+# useful for combatting certain DoS attacks.
+{{ macros.config_row(config, 'deny_email_enable', '#deny_email_enable=YES', true) }}
+# (default follows)
+{{ macros.config_row(config, 'banned_email_file', '#banned_email_file=/etc/vsftpd.banned_emails', true) }}
+#
+# You may restrict local users to their home directories.  See the FAQ for
+# the possible risks in this before using chroot_local_user or
+# chroot_list_enable below.
+{{ macros.config_row(config, 'chroot_local_user', true) }}
+#
+# You may specify an explicit list of local users to chroot() to their home
+# directory. If chroot_local_user is YES, then this list becomes a list of
+# users to NOT chroot().
+# (Warning! chroot'ing can be very dangerous. If using chroot, make sure that
+# the user does not have write access to the top level directory within the
+# chroot)
+{{ macros.config_row(config, 'chroot_list_enable', '#chroot_list_enable=YES', true) }}
+# (default follows)
+{{ macros.config_row(config, 'chroot_list_file', '#chroot_list_file=/etc/vsftpd.chroot_list', true) }}
+#
+# You may activate the "-R" option to the builtin ls. This is disabled by
+# default to avoid remote users being able to cause excessive I/O on large
+# sites. However, some broken FTP clients such as "ncftp" and "mirror" assume
+# the presence of the "-R" option, so there is a strong case for enabling it.
+{{ macros.config_row(config, 'ls_recurse_enable', '#ls_recurse_enable=YES', true) }}
+#
+# Customization
+#
+# Some of vsftpd's settings don't fit the filesystem layout by
+# default.
+#
+# This option should be the name of a directory which is empty.  Also, the
+# directory should not be writable by the ftp user. This directory is used
+# as a secure chroot() jail at times vsftpd does not require filesystem
+# access.
+{{ macros.config_row(config, 'secure_chroot_dir', '/var/run/vsftpd/empty') }}
+#
+# This string is the name of the PAM service vsftpd will use.
+{{ macros.config_row(config, 'pam_service_name', 'vsftpd') }}
+#
+# This option specifies the location of the RSA certificate to use for SSL
+# encrypted connections.
+{{ macros.config_row(config, 'rsa_cert_file', '/etc/ssl/private/vsftpd.pem') }}
+
+#
+# Ssl
+#
+{{ macros.config_row(config, 'ssl_enable', true) }}
+{{ macros.config_row(config, 'allow_anon_ssl', false) }}
+{{ macros.config_row(config, 'force_local_logins_ssl', true) }}
+{{ macros.config_row(config, 'force_local_data_ssl', true) }}
+{{ macros.config_row(config, 'ssl_tlsv1', true) }}
+{{ macros.config_row(config, 'ssl_sslv2', false) }}
+{{ macros.config_row(config, 'ssl_sslv3', false) }}
+{{ macros.config_row(config, 'require_ssl_reuse', false) }}
+{{ macros.config_row(config, 'ssl_ciphers', 'HIGH') }}
+
+#
+# Guest
+#
+{{ macros.config_row(config, 'guest_enable', true) }}
+{{ macros.config_row(config, 'user_config_dir', elao_vsftpd_guests_config_dir) }}
+
+{{ macros.config(config, [
+    'listen',
+    'listen_ipv6',
+    'anonymous_enable',
+    'local_enable',
+    'write_enable',
+    'local_umask',
+    'anon_upload_enable',
+    'anon_mkdir_write_enable',
+    'dirmessage_enable',
+    'use_localtime',
+    'xferlog_enable',
+    'connect_from_port_20',
+    'chown_uploads',
+    'chown_username',
+    'xferlog_file',
+    'xferlog_std_format',
+    'idle_session_timeout',
+    'data_connection_timeout',
+    'nopriv_user',
+    'async_abor_enable',
+    'ascii_upload_enable',
+    'ascii_download_enable',
+    'ftpd_banner',
+    'deny_email_enable',
+    'banned_email_file',
+    'chroot_local_user',
+    'chroot_list_enable',
+    'chroot_list_file',
+    'ls_recurse_enable',
+    'secure_chroot_dir',
+    'pam_service_name',
+    'rsa_cert_file',
+
+    'ssl_enable',
+    'allow_anon_ssl',
+    'force_local_logins_ssl',
+    'force_local_data_ssl',
+    'ssl_tlsv1',
+    'ssl_sslv2',
+    'ssl_sslv3',
+    'require_ssl_reuse',
+    'ssl_ciphers',
+
+    'guest_enable',
+    'user_config_dir'
+]) }}

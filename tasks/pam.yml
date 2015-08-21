@@ -1,0 +1,7 @@
+---
+
+- name: pam > Template
+  template:
+    src:  "{{ elao_vsftpd_pam_config_template|ternary(elao_vsftpd_pam_config_template, 'pam/base.j2') }}"
+    dest: "{{ elao_vsftpd_pam_config_file }}"
+  when: elao_vsftpd_pam_config_template is not none

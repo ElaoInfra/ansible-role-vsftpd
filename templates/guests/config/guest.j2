@@ -1,0 +1,23 @@
+{%- import '_macros.j2' as macros with context -%}
+
+{% set config = item.config -%}
+
+{{ macros.config_row(config, 'anon_world_readable_only', false) }}
+{{ macros.config_row(config, 'write_enable', true) }}
+{{ macros.config_row(config, 'anon_upload_enable', true) }}
+{{ macros.config_row(config, 'anon_mkdir_write_enable', true) }}
+{{ macros.config_row(config, 'anon_other_write_enable', true) }}
+{{ macros.config_row(config, 'virtual_use_local_privs', true) }}
+{{ macros.config_row(config, 'local_umask', '022') }}
+{{ macros.config_row(config, 'anon_umask', '022') }}
+
+{{ macros.config(config, [
+    'anon_world_readable_only',
+    'write_enable',
+    'anon_upload_enable',
+    'anon_mkdir_write_enable',
+    'anon_other_write_enable',
+    'virtual_use_local_privs',
+    'local_umask',
+    'anon_umask'
+]) }}
